@@ -27,7 +27,7 @@ pipeline {
         stage("build") {
             steps {
                 sh 'rm -rf HM-Demo'
-                sh 'git clone https://github.com/pavaraj29/HM-Demo.git'
+                sh 'git clone https://github.com/HM-demo/Kubernetes-Demo'
             }
         }
         stage("Docker image build") {

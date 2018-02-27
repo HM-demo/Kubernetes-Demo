@@ -26,13 +26,13 @@ pipeline {
     stages {
         stage("build") {
             steps {
-                sh 'rm -rf HM-Demo'
+                sh 'rm -rf Kubernetes-Demo'
                 sh 'git clone https://github.com/HM-demo/Kubernetes-Demo'
             }
         }
         stage("Docker image build") {
             steps {
-                sh 'cd HM-Demo &&  sudo docker build -t nodejs-image-new .'
+                sh 'cd Kubernetes-Demo &&  sudo docker build -t nodejs-image-new .'
             }
         }
         stage("Docker image tag") {
@@ -60,7 +60,7 @@ pipeline {
             }
             steps {
                 sh '''
-                cd HM-Demo
+                cd Kubernetes-Demo
                 kubectl patch deployment ${deployment} --patch "$(cat patch.yaml)"
                 '''
             }
@@ -72,7 +72,7 @@ pipeline {
             }
             steps {
                 sh '''
-                cd HM-Demo
+                cd Kubernetes-Demo
                 curr_env=`kubectl get svc my-service -n hm-demo -o jsonpath="{.spec.selector.color}"`
                 if [ $curr_env = "blue" ];then new_env="green";else new_env="blue";fi
                  sed -i -e 's/nodejs-app-demo/nodejs-app-demo:'${VERSION}'/g' deploy-${new_env}.yaml

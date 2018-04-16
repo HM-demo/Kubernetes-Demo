@@ -34,7 +34,7 @@ pipeline {
         }
         stage("Docker image build") {
             steps {
-                sh 'cd Kubernetes-Demo &&  sudo docker build -t nodejs-image-new .'
+                sh 'sudo docker build -t nodejs-image-new .'
             }
         }
         stage("Docker image tag") {
@@ -48,7 +48,7 @@ pipeline {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'Dockercreds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                 sh '''sudo docker login -u $USERNAME -p $PASSWORD
                 sudo docker push ${image}:${VERSION}
-                cd Kubernetes-Demo
+                //cd Kubernetes-Demo
                 sed -i -e 's/nodejs-app-demo/nodejs-app-demo:'${VERSION}'/g' patch.yaml
                 '''
                 }     
@@ -62,7 +62,7 @@ pipeline {
             }
             steps {
                 sh '''
-                cd Kubernetes-Demo
+                // cd Kubernetes-Demo
                 kubectl patch deployment ${deployment} --patch "$(cat patch.yaml)"
                 '''
             }
@@ -74,7 +74,7 @@ pipeline {
             }
             steps {
                 sh '''
-                cd Kubernetes-Demo
+                //cd Kubernetes-Demo
                 curr_env=`kubectl get svc nodejs-service -o jsonpath="{.spec.selector.color}"`
                 if [ $curr_env = "blue" ];then new_env="green";else new_env="blue";fi
                  sed -i -e 's/nodejs-app-demo/nodejs-app-demo:'${VERSION}'/g' deploy-${new_env}.yaml

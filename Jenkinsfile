@@ -26,8 +26,10 @@ pipeline {
     stages {
         stage("build") {
             steps {
-                sh 'rm -rf Kubernetes-Demo'
-                sh 'git clone https://github.com/HM-demo/Kubernetes-Demo'
+                #sh 'rm -rf Kubernetes-Demo'
+                #sh 'git clone https://github.com/HM-demo/Kubernetes-Demo'
+                cleanWs()
+                checkout scm
             }
         }
         stage("Docker image build") {
